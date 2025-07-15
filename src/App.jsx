@@ -39,7 +39,7 @@ function App() {
     setFilterType('all');
   };
 
-  // Filter breweries
+  // Filter breweries (preserving all original criteria)
   const filteredBreweries = breweries.filter(brewery => {
     const matchesSearch = brewery.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterType === 'all' || brewery.brewery_type === filterType;
@@ -104,6 +104,7 @@ function App() {
             <option value="micro">Micro</option>
             <option value="regional">Regional</option>
             <option value="brewpub">Brewpub</option>
+            <option value="large">Large</option>
           </select>
         </div>
 
@@ -126,7 +127,7 @@ function App() {
               </div>
             ))
           ) : (
-            <div className="no-results">No breweries found</div>
+            <div className="no-results">No breweries found matching your criteria</div>
           )}
         </div>
       </main>
