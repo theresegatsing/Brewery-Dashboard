@@ -2,17 +2,18 @@ import { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
+  // State
   const [breweries, setBreweries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
-  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
+  const [currentTime, setCurrentTime] = useState('');
 
-  // Fetch breweries data
+  // Fetch breweries
   useEffect(() => {
     const fetchBreweries = async () => {
       try {
-        const response = await fetch('https://api.openbrewerydb.org/v1/breweries?per_page=20');
+        const response = await fetch('https://api.openbrewerydb.org/v1/breweries?per_page=50');
         const data = await response.json();
         setBreweries(data);
       } catch (error) {
@@ -24,7 +25,7 @@ function App() {
 
     fetchBreweries();
 
-    // Update time every second
+    // Update time
     const timer = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString());
     }, 1000);
@@ -32,11 +33,12 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
-  // Statistics calculations
-  const totalBreweries = breweries.length;
-  const microBreweries = breweries.filter(b => b.brewery_type === 'micro').length;
-  const regionalBreweries = breweries.filter(b => b.brewery_type === 'regional').length;
-  
+  // Reset function
+  const resetDashboard = () => {
+    setSearchTerm('');
+    setFilterType('all');
+  };
+
   // Filter breweries
   const filteredBreweries = breweries.filter(brewery => {
     const matchesSearch = brewery.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -48,38 +50,39 @@ function App() {
 
   return (
     <div className="dashboard">
-      
+      {/* Sidebar */}
       <div className="sidebar">
         <div className="logo">BrewDash</div>
         <nav className="nav">
-          <span>🏠 Dashboard</span>
+          <span onClick={resetDashboard}>🏠 Dashboard</span>
           <span>🔍 Search</span>
           <span>ℹ️ About</span>
         </nav>
       </div>
-      
+
       {/* Header */}
-      <header className='header'>
+      <header className="header">
         <div className="location-time">
           <div>Portland, OR</div>
           <div>{currentTime}</div>
         </div>
       </header>
 
+      {/* Main Content */}
       <main className="main-content">
         {/* Stats */}
         <div className="stats-container">
           <div className="stat-card">
             <h3>Total Breweries</h3>
-            <p>{totalBreweries}</p>
+            <p>{breweries.length}</p>
           </div>
           <div className="stat-card">
             <h3>Micro Breweries</h3>
-            <p>{microBreweries}</p>
+            <p>{breweries.filter(b => b.brewery_type === 'micro').length}</p>
           </div>
           <div className="stat-card">
             <h3>Regional Breweries</h3>
-            <p>{regionalBreweries}</p>
+            <p>{breweries.filter(b => b.brewery_type === 'regional').length}</p>
           </div>
         </div>
 
@@ -101,11 +104,10 @@ function App() {
             <option value="micro">Micro</option>
             <option value="regional">Regional</option>
             <option value="brewpub">Brewpub</option>
-            <option value="large">Large</option>
           </select>
         </div>
 
-        {/* Breweries List */}
+        {/* Breweries Table */}
         <div className="breweries-table">
           <div className="table-header">
             <span>Name</span>
@@ -124,7 +126,7 @@ function App() {
               </div>
             ))
           ) : (
-            <div className="no-results">No breweries found matching your criteria</div>
+            <div className="no-results">No breweries found</div>
           )}
         </div>
       </main>
