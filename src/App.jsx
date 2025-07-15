@@ -8,6 +8,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [currentTime, setCurrentTime] = useState('');
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   // Fetch breweries
   useEffect(() => {
@@ -15,7 +16,12 @@ function App() {
       try {
         const response = await fetch('https://api.openbrewerydb.org/v1/breweries?per_page=50');
         const data = await response.json();
-        setBreweries(data);
+        // Add mock proprietor data since API doesn't provide it
+        const breweriesWithProprietor = data.map(brewery => ({
+          ...brewery,
+          proprietor: `Proprietor ${Math.floor(Math.random() * 100)}` // Mock data
+        }));
+        setBreweries(breweriesWithProprietor);
       } catch (error) {
         console.error("Error fetching breweries:", error);
       } finally {
@@ -33,18 +39,40 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
+  // Sort breweries
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedBreweries = [...breweries].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'asc' ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+
+  // Filter breweries
+  const filteredBreweries = sortedBreweries.filter(brewery => {
+    const matchesSearch = 
+      brewery.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      brewery.proprietor.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter = filterType === 'all' || brewery.brewery_type === filterType;
+    return matchesSearch && matchesFilter;
+  });
+
   // Reset function
   const resetDashboard = () => {
     setSearchTerm('');
     setFilterType('all');
+    setSortConfig({ key: null, direction: 'asc' });
   };
-
-  // Filter breweries (preserving all original criteria)
-  const filteredBreweries = breweries.filter(brewery => {
-    const matchesSearch = brewery.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterType === 'all' || brewery.brewery_type === filterType;
-    return matchesSearch && matchesFilter;
-  });
 
   if (loading) return <div className="loading">Loading breweries...</div>;
 
@@ -90,7 +118,7 @@ function App() {
         <div className="controls">
           <input
             type="text"
-            placeholder="Search breweries..."
+            placeholder="Search breweries or proprietors..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-bar"
@@ -111,10 +139,18 @@ function App() {
         {/* Breweries Table */}
         <div className="breweries-table">
           <div className="table-header">
-            <span>Name</span>
-            <span>Type</span>
-            <span>City</span>
-            <span>State</span>
+            <span onClick={() => requestSort('name')}>
+              Name {sortConfig.key === 'name' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+            </span>
+            <span onClick={() => requestSort('brewery_type')}>
+              Type {sortConfig.key === 'brewery_type' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+            </span>
+            <span onClick={() => requestSort('proprietor')}>
+              Proprietor {sortConfig.key === 'proprietor' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+            </span>
+            <span onClick={() => requestSort('city')}>
+              City {sortConfig.key === 'city' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+            </span>
           </div>
           
           {filteredBreweries.length > 0 ? (
@@ -122,8 +158,8 @@ function App() {
               <div key={brewery.id} className="brewery-row">
                 <span className="brewery-name">{brewery.name}</span>
                 <span className="brewery-type">{brewery.brewery_type}</span>
+                <span className="brewery-proprietor">{brewery.proprietor}</span>
                 <span className="brewery-city">{brewery.city}</span>
-                <span className="brewery-state">{brewery.state}</span>
               </div>
             ))
           ) : (
