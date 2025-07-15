@@ -1,11 +1,8 @@
-# Web Development Project 5 - *BrewDash*
+# Web Development Project 5 - *BrewDash – Brewery Dashboard Web App*
 
 Submitted by: **Therese Elvira Mombou Gatsing**
 
-This web app: **A responsive React dashboard that fetches data from the OpenBreweryDB API and displays brewery information by type, name, city, and state.
-Includes a real-time clock, search functionality, and filter controls for brewery type.
-Built with React, useEffect, and modern CSS for layout and styling.
-Perfect for practicing API calls, state management, and conditional rendering in React.**
+This web app: **A responsive React dashboard that fetches data from the OpenBreweryDB API and displays brewery information by type, name, city, and state. Includes a real-time clock, search functionality, and filter controls for brewery type. Built with React, useEffect, and modern CSS for layout and styling. Perfect for practicing API calls, state management, and conditional rendering in React.**
 
 Time spent: **7** hours spent in total
 
