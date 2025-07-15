@@ -1,4 +1,4 @@
-# Web Development Project 5 - *BrewDash – Brewery Dashboard Web App*
+# Web Development Project 5 - *BrewDash: Brewery Dashboard Web App*
 
 Submitted by: **Therese Elvira Mombou Gatsing**
 
