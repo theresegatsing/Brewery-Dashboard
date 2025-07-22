@@ -1,10 +1,10 @@
-# Web Development Project 6 - *Name of App Here*
+# Web Development Project 6 - *Brewery Dashboard  App*
 
-Submitted by: **Your Name Here**
+Submitted by: **Therese Elvira Mombou Gatsing**
 
 This web app: **insert description**
 
-Time spent: **X** hours spent in total
+Time spent: **4** hours spent in total
 
 ## Required Features
 
