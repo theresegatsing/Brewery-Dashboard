@@ -29,6 +29,7 @@ function BreweryDetail() {
         <div className="logo">BrewDash</div>
         <nav className="nav">
           <a href="/">🏠 Dashboard</a>
+          <span>🔍 Search</span>
           <span>ℹ️ About</span>
         </nav>
       </div>
