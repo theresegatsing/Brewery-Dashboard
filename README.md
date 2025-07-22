@@ -46,7 +46,7 @@ GIF created with ScreenToGif
 
 ## Notes
 
--Creating the charts was a little bit challenging 
+- Creating the charts was a little bit challenging 
 
 ## License
 
