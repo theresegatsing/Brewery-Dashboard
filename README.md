@@ -2,7 +2,7 @@
 
 Submitted by: **Therese Elvira Mombou Gatsing**
 
-This web app: **insert description**
+This web app: **A responsive React dashboard that displays brewery data from the OpenBreweryDB API with live search, filters, and a real-time clock. Users can click on any brewery to view a dedicated detail page featuring expanded information such as address, contact, and website, each with a unique URL. The app includes interactive charts that visualize brewery distribution by type and by state, offering insights into the dataset. Built using React, React Router, Recharts, useEffect, and modern CSS for a clean, interactive UI experience.**
 
 Time spent: **4** hours spent in total
 
